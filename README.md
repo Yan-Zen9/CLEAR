@@ -101,7 +101,21 @@ Our evaluation protocol follows ACE: we use the evaluation code of ACE together 
 
 ## Training
 
-Not required. CLEAR uses the public LFM checkpoints and the pretrained VAE and classifiers as they are.
+CLEAR needs no training: all reported results use the public LFM checkpoints. To apply CLEAR to your own data, you can train your own latent flow model (an unconditional DiT) on latents encoded with `data/encode_latents.py` (see step 2):
+
+```bash
+python train/train_flow.py --latent_dir data/celebahq/latents --model DiT-L/2 --batch_size 64 --epochs 500
+```
+
+Set `--batch_size` (per GPU) and `--epochs` explicitly. For multiple GPUs, launch with `torchrun`:
+
+```bash
+torchrun --standalone --nproc_per_node=8 train/train_flow.py --latent_dir data/celebahq/latents --model DiT-L/2 --batch_size 64 --epochs 500
+```
+
+Add `--init_from <LFM checkpoint> --lr 1e-5` to fine-tune a public LFM checkpoint instead of training from scratch, and `--resume_from <ckpt.tar>` to resume a run.
+
+Checkpoints are written to `records/<ds_name>_latent/Logs_Checkpoints/checkpoints/version_<n>/`, where `--ds_name` (default `CelebA`) only names the folder. `ckpt.tar` holds the full training state for resuming, and `ema_step<N>.pt` holds the EMA weights. Pass an `ema_step<N>.pt` file as `CF_DIFFUSION_CKPT` in step 3 to generate counterfactuals with your own model.
 
 ## Datasets
 
@@ -113,4 +127,4 @@ Coming soon.
 
 ## License
 
-CLEAR is released under the [CC BY-NC 4.0](LICENSE) license, for non-commercial use. Parts of `flow/` are derived from LFM, DiT and flow_matching and remain subject to their upstream license terms, see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Model weights and datasets are not redistributed here and are subject to their own licenses.
+License information will be added after the release terms for the project and its upstream components have been confirmed.
