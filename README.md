@@ -1,17 +1,12 @@
 # CLEAR: Cooperative Latent Flow for Visual Counterfactual Explanations with Accurate Region Preservation
 
-Official PyTorch implementation of **CLEAR: Cooperative Latent Flow for Visual Counterfactual Explanations with Accurate Region Preservation**, accepted at **WACV 2027**.
+**Accepted to WACV 2027** (direct Round 2 submission, no rebuttal).
 
-> **WACV 2027 · Round 2.** CLEAR was submitted directly to Round 2 of WACV 2027, a single review round without a rebuttal or revision phase, and accepted.
+<!-- Once the links exist, wrap each badge as [![...](...)](URL). -->
+![Paper](https://img.shields.io/badge/arXiv-Paper-b31b1b?logo=arxiv&logoColor=white)
+![Project Page](https://img.shields.io/badge/Project-Page-4285F4?logo=googlechrome&logoColor=white)
 
-Paper: link coming soon.
-
-CLEAR generates visual counterfactual explanations (VCEs) in the latent space of a frozen VAE with a pretrained Latent Flow Matching model. It combines two components:
-
-- **Cooperative Flow Guidance** uses the explicit instantaneous Flow Matching velocity as a reference to decompose classifier guidance into cooperative and conflicting components, and attenuates only the conflicting one according to its strength.
-- **Adaptive Support Preservation (ASP)** dynamically localizes the editable region, constrains latent modifications to it, and copies the factual pixels outside it, so VAE reconstruction cannot alter decision-irrelevant content.
-
-CLEAR requires **no training or fine-tuning**: the flow model, the VAE and the target classifier are all frozen. On CelebA-HQ Smile, CLEAR is 2.5× faster than MaskDiME with comparable or better counterfactual quality. The repository supports CelebA-HQ (256×256, Smile and Age) and ImageNet (256×256, three class pairs).
+CLEAR is a latent Flow Matching framework for visual counterfactual explanations (VCEs) that keeps the efficiency of latent generation while approaching the fidelity of image-space methods. We identify two sources of the fidelity gap: classifier guidance can oppose the generative direction, and VAE reconstruction can alter regions that should stay unchanged. **Cooperative Flow Guidance** uses the explicit instantaneous Flow Matching velocity as a reference to decompose classifier guidance into cooperative and conflicting components, and attenuates only the conflicting one according to its strength. **Adaptive Support Preservation (ASP)** dynamically localizes the editable region, constrains latent modifications to it, and copies the factual pixels outside it. We also analyze the frequency and strength of directional conflicts throughout generation, showing how classifier guidance interacts with the generative process. On CelebA-HQ and ImageNet, CLEAR improves FID and sFID over latent-space baselines and, on CelebA-HQ Smile, reaches comparable or better quality than image-space methods with a 2.5× speedup over MaskDiME, without any training or fine-tuning.
 
 ## Installation
 
