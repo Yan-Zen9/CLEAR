@@ -1,0 +1,116 @@
+# CLEAR: Cooperative Latent Flow for Visual Counterfactual Explanations with Accurate Region Preservation
+
+Official PyTorch implementation of **CLEAR: Cooperative Latent Flow for Visual Counterfactual Explanations with Accurate Region Preservation**, accepted at **WACV 2027**.
+
+> **WACV 2027 · Round 2.** CLEAR was submitted directly to Round 2 of WACV 2027, a single review round without a rebuttal or revision phase, and accepted.
+
+Paper: link coming soon.
+
+CLEAR generates visual counterfactual explanations (VCEs) in the latent space of a frozen VAE with a pretrained Latent Flow Matching model. It combines two components:
+
+- **Cooperative Flow Guidance** uses the explicit instantaneous Flow Matching velocity as a reference to decompose classifier guidance into cooperative and conflicting components, and attenuates only the conflicting one according to its strength.
+- **Adaptive Support Preservation (ASP)** dynamically localizes the editable region, constrains latent modifications to it, and copies the factual pixels outside it, so VAE reconstruction cannot alter decision-irrelevant content.
+
+CLEAR requires **no training or fine-tuning**: the flow model, the VAE and the target classifier are all frozen. On CelebA-HQ Smile, CLEAR is 2.5× faster than MaskDiME with comparable or better counterfactual quality. The repository supports CelebA-HQ (256×256, Smile and Age) and ImageNet (256×256, three class pairs).
+
+## Installation
+
+Python 3.10 or newer is recommended. Install the PyTorch build appropriate for your CUDA or ROCm platform if the pinned build in `requirements.txt` is not suitable.
+
+```bash
+git clone https://github.com/Yan-Zen9/CLEAR.git
+cd CLEAR
+
+python -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+## Quick start
+
+### 1. Download pretrained weights
+
+**Latent Flow Matching models.** We use the public checkpoints of [LFM](https://github.com/VinAIResearch/LFM); the download links are in the checkpoint table of its README. Place them under `checkpoints/` (the paths used in step 3).
+
+| LFM experiment | Backbone | Dataset | Resolution | File |
+| --- | --- | --- | --- | --- |
+| `celeb_f8_dit` | DiT-L/2 (unconditional) | CelebA-HQ | 256×256 | `model_475.pth` |
+| `imnet_f8_ditb2` | DiT-B/2 (class-conditional, used unconditionally at inference) | ImageNet | 256×256 | `model_875.pth` |
+
+**VAE.** `stabilityai/sd-vae-ft-mse`, downloaded automatically by `diffusers` on first use.
+
+**Classifiers under explanation.** We use the same classifiers as ACE.
+
+- CelebA-HQ: download `checkpoints_decision_densenet.tar.gz` from the [STEEX](https://github.com/valeoai/STEEX/releases) releases and use `celebamaskhq/checkpoint.tar`. Keep the `celebamaskhq/` folder name in the path, since the classifier type is detected from it.
+- ImageNet: the torchvision ResNet-50 (`IMAGENET1K_V1`):
+
+```bash
+wget -P checkpoints/classifiers/imagenet https://download.pytorch.org/models/resnet50-0676ba61.pth
+```
+
+### 2. Prepare the data
+
+CLEAR starts from the VAE latent of the factual image and preserves the region outside the edit with the original pixels, so images are first resized to 256×256 and encoded to latents.
+
+```bash
+# CelebA-HQ
+python data/resize_images.py --src <CelebAMask-HQ>/CelebA-HQ-img --dst data/celebahq/img256 --size 256
+python data/encode_latents.py --src data/celebahq/img256 --dst data/celebahq/latents --size 256
+
+# ImageNet: encode each class folder (<wnid>/<wnid>_<n>.JPEG) separately
+python data/encode_latents.py --src data/imagenet/n02389026 --dst data/imagenet_latents/n02389026 --size 256
+```
+
+CelebA-HQ additionally needs a label table `data/celebahq/labels.csv` with the columns `hq_idx,split,Smiling,Young`. Data splits follow ACE.
+
+### 3. Inference: generate counterfactuals
+
+CelebA-HQ Smile as an example:
+
+```bash
+CF_DATASET=celeba \
+CF_DIFFUSION_CKPT=checkpoints/lfm/celeba-hq/model_475.pth \
+CF_PIXEL_CLASSIFIER_CKPT=checkpoints/classifiers/celebamaskhq/checkpoint.tar \
+CF_CLASSIFIER_QUERY_LABEL=31 \
+CF_LATENT_DIR=data/celebahq/latents \
+CF_LABELS_CSV=data/celebahq/labels.csv \
+CF_ATTR=Smiling \
+CF_IMG_DIR=data/celebahq/img256 \
+CF_SALIENCY_MODE=gradcam \
+CF_MASK_RATIO=0.05 \
+CF_OUTPUT_DIR=outputs/celebahq_smile \
+python cf/generate.py
+```
+
+The other tasks only change the following variables:
+
+| Task | `CF_DATASET` | `CF_CLASSIFIER_QUERY_LABEL` / `CF_ATTR` (or `CF_PAIR`) | `CF_MASK_RATIO` |
+| --- | --- | --- | --- |
+| CelebA-HQ Smile | `celeba` | `31` / `Smiling` | `0.05` |
+| CelebA-HQ Age | `celeba` | `39` / `Young` | `0.12` |
+| ImageNet | `imagenet` | `CF_PAIR=sorrel_zebra`, `persian_egyptian` or `cougar_cheetah` | `0.30` |
+
+For ImageNet, also set `CF_LATENT_DIR=data/imagenet_latents`, `CF_IMG_DIR=data/imagenet`, `CF_IMG_EXT=.JPEG` and `CF_IMG_NESTED_WNID=true`, and use the ImageNet LFM checkpoint and the ResNet-50 classifier.
+
+`CF_IMG_DIR` must be set: otherwise the region outside the edit keeps the VAE reconstruction instead of the exact factual pixels. All other hyperparameters default to the paper settings (`t_s=0.6`, `N=20`, `s=8`, `τ=0.5`, dilation radius 4). Results (`x_0.png`, `x_cf.png`, ...) are written to `CF_OUTPUT_DIR`.
+
+### 4. Evaluation
+
+Our evaluation protocol follows ACE: we use the evaluation code of ACE together with the evaluation model weights linked there. On CelebA-HQ we report FID, sFID, FVA, FS, MNAC, CD, COUT and flip rate; on ImageNet, FID, sFID, S3, COUT and flip rate. Efficiency (inference time and peak GPU memory) follows MaskDiME and is recorded per sample in `metrics.csv`.
+
+## Training
+
+Not required. CLEAR uses the public LFM checkpoints and the pretrained VAE and classifiers as they are.
+
+## Datasets
+
+CelebA-HQ download and preparation follow ACE / STEEX ([CelebAMask-HQ](https://github.com/switchablenorms/CelebAMask-HQ)). ImageNet uses the three class pairs of the DiME / ACE protocol: sorrel ↔ zebra, Persian cat ↔ Egyptian cat, and cougar ↔ cheetah.
+
+## BibTeX
+
+Coming soon.
+
+## License
+
+License information will be added after the release terms for the project and its upstream components have been confirmed.

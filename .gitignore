@@ -1,0 +1,24 @@
+# python
+__pycache__/
+*.pyc
+.venv/
+
+# macOS
+.DS_Store
+
+# weights, data and outputs: never commit
+checkpoints/
+outputs/
+cf_records/
+records/
+data/celebahq/
+data/imagenet/
+data/imagenet_latents/
+*.pth
+*.pt
+*.tar
+*.npy
+
+# logs
+*.err
+*.out
