@@ -1,12 +1,12 @@
 """
-Loading + I/O for flow-matching counterfactual generation (MedDiME).
+Loading + I/O for flow-matching counterfactual generation (CLEAR).
 
 Loaders: velocity DiT, latent/pixel classifiers, VAE, latent test set.
 I/O: save/decode latents, save image tensors, write labels, attribution heatmaps.
 
 The velocity model is an LFM-format DiT (flow/dit.py); `load_flow_model` accepts
 the released VinAI LFM checkpoints directly and returns a `DiTVelocity` wrapper
-that speaks MedDiME convention (t=0 noise -> t=1 data, velocity toward data).
+that speaks CLEAR convention (t=0 noise -> t=1 data, velocity toward data).
 """
 
 import os
@@ -32,7 +32,7 @@ def load_flow_model(checkpoint_path: str, device: str = "cuda"):
     trainer checkpoints ({'model'/'ema'}; EMA preferred). The architecture is
     inferred from the weight shapes (flow.dit.infer_dit_arch) — no env flag.
 
-    Returns (model, info): `model` is a DiTVelocity in MedDiME convention —
+    Returns (model, info): `model` is a DiTVelocity in CLEAR convention —
     model(x, t), continuous t in [0,1], 0 = noise -> 1 = data.
 
     Conditional checkpoints (e.g. ImageNet, 1000-class + CFG null token):

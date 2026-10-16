@@ -1,5 +1,5 @@
 """
-Vendored, self-contained flow-matching core for MedDiME.
+Vendored, self-contained flow-matching core for CLEAR.
 
 Flow math is a minimal distillation of Meta's `flow_matching` library
 (arXiv:2412.06264); the velocity model is an LFM-format DiT (flow/dit.py) so the

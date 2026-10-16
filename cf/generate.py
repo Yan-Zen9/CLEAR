@@ -1,5 +1,5 @@
 """
-Flow-matching counterfactual generation (MedDiME) — CLI entry point.
+Flow-matching counterfactual generation (CLEAR) — CLI entry point.
 
 Unified classifier interface (cf.classifier, vendored from FiRe):
 the classifier outputs multi-class logits; the target is a class INDEX; guidance
@@ -144,7 +144,7 @@ def main():
     if direct_output:
         save_res_path = direct_output
     else:
-        out_root = (os.environ.get("CF_RECORDS_ROOT") or os.environ.get("MEDDIME_RECORDS_ROOT")
+        out_root = (os.environ.get("CF_RECORDS_ROOT") or os.environ.get("CLEAR_RECORDS_ROOT")
                     or "./cf_records").strip()
         base = os.path.join(out_root, "cf_generating", f"{cfconfig.ds_name}_flow_{cfconfig.model_var}")
         save_res_path = os.path.join(base, os.environ.get("CF_VERSION_NAME", "version_0"))

@@ -1,5 +1,5 @@
 """
-Counterfactual generation (flow matching) for MedDiME.
+Counterfactual generation (flow matching) for CLEAR.
 
 Modules:
     config     - run configuration (env-driven) + print/save helpers

@@ -1,5 +1,5 @@
 """
-Unified classifier interface for MedDiME (vendored from FiRe/CFgenerating).
+Unified classifier interface for CLEAR (vendored from FiRe/CFgenerating).
 
 Same calling convention as FiRe so checkpoints and usage are consistent:
     bundle = get_classifier_bundle(ckpt, device, query_label=..., classifier_mode=...)

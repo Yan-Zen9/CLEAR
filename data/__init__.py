@@ -1,4 +1,4 @@
-"""Data loading for MedDiME (latent features)."""
+"""Data loading for CLEAR (latent features)."""
 
 from data.latent import (
     LatentFeatureDataset,

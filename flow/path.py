@@ -1,7 +1,7 @@
 """
 Affine probability path for flow matching (vendored, self-contained).
 
-Distilled from Meta's `flow_matching` library so MedDiME does not import the
+Distilled from Meta's `flow_matching` library so CLEAR does not import the
 external package. Implements the affine path
 
     X_t = alpha_t * X_1 + sigma_t * X_0,     X_1 = data,  X_0 = noise,

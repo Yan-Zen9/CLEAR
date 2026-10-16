@@ -1,5 +1,5 @@
 """
-Configuration for flow-matching counterfactual generation (MedDiME).
+Configuration for flow-matching counterfactual generation (CLEAR).
 
 Replaces the DDPM CfConfigLatent. DDPM-only knobs (total_timesteps,
 cf_from_timestep, ts_guided, rescale_t/_to, start_tau, inpaint_th,
@@ -7,7 +7,7 @@ save_attribution_at, ...) are gone. Flow matching adds `t_start` (image-to-image
 start time in (0,1); closer to 1 = less noise) and `num_steps` (ODE steps).
 
 Dataset / paths are env-driven (CF_DATASET, CF_MODEL_VAR, CF_DIFFUSION_CKPT,
-CF_PIXEL_CLASSIFIER_CKPT, MEDDIME_RECORDS_ROOT, MEDDIME_WEIGHTS_DIR, ...).
+CF_PIXEL_CLASSIFIER_CKPT, CLEAR_RECORDS_ROOT, CLEAR_WEIGHTS_DIR, ...).
 Missing checkpoints WARN instead of asserting, so the module imports anywhere.
 
 Support attribution:
@@ -29,8 +29,8 @@ DEFAULT_VAE_MODEL = "stabilityai/sd-vae-ft-mse"
 DEFAULT_VAE_SCALING = 0.18215
 
 # Path roots (env-overridable; empty -> provide ckpt paths via env at run time)
-_RECORDS_ROOT = os.environ.get("MEDDIME_RECORDS_ROOT", "").strip()
-_WEIGHTS_DIR = os.environ.get("MEDDIME_WEIGHTS_DIR", "").strip()
+_RECORDS_ROOT = os.environ.get("CLEAR_RECORDS_ROOT", "").strip()
+_WEIGHTS_DIR = os.environ.get("CLEAR_WEIGHTS_DIR", "").strip()
 
 # ----------------------------------------------------- ImageNet CE benchmark maps
 # The DiME/ACE/FastDiME 6-class subset. Folder (wnid) -> TRUE ImageNet-1k index
@@ -147,7 +147,7 @@ use_lcc = _use_lcc_env != "false" if _use_lcc_env else True
 
 confounder_filter = os.environ.get("CF_CONFOUNDER_FILTER", "all")
 
-# checkpoint paths: env first, else derive from MEDDIME_RECORDS_ROOT/WEIGHTS_DIR if set
+# checkpoint paths: env first, else derive from CLEAR_RECORDS_ROOT/WEIGHTS_DIR if set
 _diff_default = (os.path.join(_RECORDS_ROOT, f"{ds_name}_flow", "checkpoints", "ckpt.tar")
                  if _RECORDS_ROOT else "")
 diffusion_checkpoint_path = os.environ.get("CF_DIFFUSION_CKPT", _diff_default)

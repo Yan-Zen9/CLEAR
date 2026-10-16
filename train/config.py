@@ -9,12 +9,12 @@ import pickle
 
 @dataclass
 class BaseConfig:
-    repo_home_dir: str = os.environ.get("MEDDIME_REPO_DIR", os.getcwd())
+    repo_home_dir: str = os.environ.get("CLEAR_REPO_DIR", os.getcwd())
     DEVICE : str = get_default_device()
     ds_name : str = 'ISIC_2018'
 
     split: str ='train' # 'train', 'test'
-    record_dir: str = os.environ.get("MEDDIME_RECORDS_ROOT", "./records")
+    record_dir: str = os.environ.get("CLEAR_RECORDS_ROOT", "./records")
     DATASET: str
     if (ds_name.startswith('OUT')):
         DATASET: str = ds_name

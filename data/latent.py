@@ -1,5 +1,5 @@
 """
-Latent-feature datasets for MedDiME (merged).
+Latent-feature datasets for CLEAR (merged).
 
 Consolidates the two previously-duplicated loaders:
   * LatentFeatureDataset  - features only, for velocity-model (flow) training.
@@ -106,15 +106,15 @@ class LatentLabeledDataset(Dataset):
 
 def get_latent_loader_by_name(dataset_name, batch_size=1, device="cuda",
                               shuffle=False, num_workers=0):
-    """DataLoader over '<DS>_latent-<split>' under CF_DATA_ROOT / MEDDIME_DATA_ROOT."""
+    """DataLoader over '<DS>_latent-<split>' under CF_DATA_ROOT / CLEAR_DATA_ROOT."""
     parts = dataset_name.split("-")
     if len(parts) != 2:
         raise ValueError(f"Invalid dataset_name '{dataset_name}', expect 'ISIC_Ruler_latent-test'")
     ds_base, split = parts
 
-    data_root_base = (os.environ.get("CF_DATA_ROOT") or os.environ.get("MEDDIME_DATA_ROOT") or "").strip()
+    data_root_base = (os.environ.get("CF_DATA_ROOT") or os.environ.get("CLEAR_DATA_ROOT") or "").strip()
     if not data_root_base:
-        raise ValueError("Set CF_DATA_ROOT (or MEDDIME_DATA_ROOT) to the latent data root.")
+        raise ValueError("Set CF_DATA_ROOT (or CLEAR_DATA_ROOT) to the latent data root.")
     data_root = os.path.join(data_root_base, ds_base)
     if not os.path.exists(data_root):
         raise FileNotFoundError(f"Latent data root not found: {data_root}")

@@ -113,4 +113,4 @@ Coming soon.
 
 ## License
 
-License information will be added after the release terms for the project and its upstream components have been confirmed.
+CLEAR is released under the [CC BY-NC 4.0](LICENSE) license, for non-commercial use. Parts of `flow/` are derived from LFM, DiT and flow_matching and remain subject to their upstream license terms, see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Model weights and datasets are not redistributed here and are subject to their own licenses.

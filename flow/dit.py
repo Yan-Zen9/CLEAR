@@ -9,16 +9,16 @@ The architecture and state-dict layout EXACTLY match VinAI LFM's `models/DiT.py`
     imagenet/model_875.pt      DiT-B/2, 1000-class + CFG null  (y table: 1001 rows)
 
 Both operate on 4x32x32 SD latents (stabilityai/sd-vae-ft-mse, x0.18215) — the
-same latent space as the rest of MedDiME, so no re-encoding is needed.
+same latent space as the rest of CLEAR, so no re-encoding is needed.
 
 timm's Attention/Mlp/PatchEmbed are re-implemented here with IDENTICAL parameter
 names (qkv/proj, fc1/fc2, proj) — no timm dependency.
 
 TIME CONVENTION (the one thing that differs from the rest of this repo):
 LFM trains with t=0 = DATA, t=1 = NOISE and the velocity pointing toward noise;
-MedDiME (Meta flow_matching CondOT) uses t=0 = noise, t=1 = data, v = x1 - x0.
+CLEAR (Meta flow_matching CondOT) uses t=0 = noise, t=1 = data, v = x1 - x0.
 `DiTVelocity` bridges the two:  v_med(x, t) = -dit(1 - t, x, y).
-Everything outside this file speaks MedDiME convention only.
+Everything outside this file speaks CLEAR convention only.
 """
 
 import math
@@ -305,9 +305,9 @@ def build_dit_from_state_dict(sd):
     return model, arch
 
 
-# ============================================================ MedDiME-facing wrapper
+# ============================================================ CLEAR-facing wrapper
 class DiTVelocity(nn.Module):
-    """MedDiME-convention velocity field on an LFM DiT:  v(x, t) = -dit(1 - t, x, y).
+    """CLEAR-convention velocity field on an LFM DiT:  v(x, t) = -dit(1 - t, x, y).
 
     forward(x, t) with continuous t in [0,1], t=0 = noise -> t=1 = data, output =
     velocity toward data (CondOT: target x1 - x0) — the convention every solver,
@@ -334,7 +334,7 @@ class DiTVelocity(nn.Module):
         t = torch.as_tensor(t, device=x.device).float().reshape(-1)
         if t.numel() == 1 and x.shape[0] > 1:
             t = t.expand(x.shape[0])
-        s = (1.0 - t).clamp(0.0, 1.0)                       # MedDiME t -> LFM time
+        s = (1.0 - t).clamp(0.0, 1.0)                       # CLEAR t -> LFM time
         y = self._y(x)
         if y is None or self.cfg_scale == 1.0:
             return -self.dit(s, x, y)

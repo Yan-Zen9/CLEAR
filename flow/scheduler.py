@@ -2,8 +2,8 @@
 Flow-matching schedulers (vendored, self-contained).
 
 Distilled from the Meta `flow_matching` library (Lipman et al., "Flow Matching
-Guide and Codebase", arXiv:2412.06264) so that MedDiME has NO dependency on the
-external package. Only the pieces MedDiME needs are kept.
+Guide and Codebase", arXiv:2412.06264) so that CLEAR has NO dependency on the
+external package. Only the pieces CLEAR needs are kept.
 
 A scheduler defines the affine probability path coefficients
     X_t = alpha_t * X_1 + sigma_t * X_0
@@ -48,7 +48,7 @@ class CondOTScheduler(Scheduler):
     """Conditional optimal-transport (linear / rectified) schedule.
 
     alpha_t = t, sigma_t = 1 - t  ->  X_t = t * X_1 + (1 - t) * X_0.
-    This is the straight-line path; the default for MedDiME.
+    This is the straight-line path; the default for CLEAR.
     """
 
     def __call__(self, t: Tensor) -> SchedulerOutput:

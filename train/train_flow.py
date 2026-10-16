@@ -1,7 +1,7 @@
 """
-Train / fine-tune the latent velocity DiT for flow matching (MedDiME).
+Train / fine-tune the latent velocity DiT for flow matching (CLEAR).
 
-Unconditional CondOT flow matching in MedDiME convention (t=0 noise -> t=1 data):
+Unconditional CondOT flow matching in CLEAR convention (t=0 noise -> t=1 data):
     x_t = t*x1 + (1-t)*x0(noise) ; target v = x1 - x0 ; loss = MSE(v, model(x_t, t))
 The model is an LFM-format DiT behind the DiTVelocity wrapper (flow/dit.py), so
 checkpoints saved here are plain DiT state dicts — interchangeable with the
@@ -141,7 +141,7 @@ def train_one_epoch(model, raw_dit, ema, path, loader, optimizer, scheduler,
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Train MedDiME latent velocity DiT (flow matching)")
+    parser = argparse.ArgumentParser(description="Train CLEAR latent velocity DiT (flow matching)")
     parser.add_argument("--latent_dir", type=str, required=True, help="latent features dir")
     parser.add_argument("--model", type=str, default="DiT-L/2", choices=list(DIT_CONFIGS),
                         help="architecture when training from scratch (ignored with --init_from)")
@@ -204,7 +204,7 @@ def main():
     if args.grad_checkpoint:
         raw_dit.enable_gradient_checkpointing = True
     raw_dit = raw_dit.to(device)
-    velocity = DiTVelocity(raw_dit)                  # training runs in MedDiME convention
+    velocity = DiTVelocity(raw_dit)                  # training runs in CLEAR convention
     model = DDP(velocity, device_ids=[dev_index]) if distributed else velocity
     ema = Ema(raw_dit, decay=args.ema_decay) if is_main else None    # EMA in plain-DiT key space
 
