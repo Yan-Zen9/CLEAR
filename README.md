@@ -127,4 +127,4 @@ Coming soon.
 
 ## License
 
-License information will be added after the release terms for the project and its upstream components have been confirmed.
+CLEAR is released under the [CC BY-NC 4.0](LICENSE) license. Third-party code is credited in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
