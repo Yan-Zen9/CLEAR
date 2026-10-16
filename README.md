@@ -2,9 +2,9 @@
 
 **Accepted to WACV 2027** (direct Round 2 submission, no rebuttal).
 
-<!-- Once the links exist, wrap each badge as [![...](...)](URL). -->
+<!-- Once the arXiv link exists, wrap the Paper badge as [![...](...)](URL). -->
 ![Paper](https://img.shields.io/badge/arXiv-Paper-b31b1b?logo=arxiv&logoColor=white)
-![Project Page](https://img.shields.io/badge/Project-Page-4285F4?logo=googlechrome&logoColor=white)
+[![Project Page](https://img.shields.io/badge/Project-Page-4285F4?logo=googlechrome&logoColor=white)](https://yan-zen9.github.io/CLEAR/)
 
 **CLEAR** is an efficient latent Flow Matching framework for high-quality visual counterfactual explanations, addressing conflicts between classifier guidance and the generative flow, as well as unintended changes caused by VAE reconstruction. **Cooperative Flow Guidance** decomposes classifier guidance relative to the instantaneous flow velocity, adaptively suppressing conflicting components while preserving useful ones. **Adaptive Support Preservation (ASP)** dynamically localizes editable regions and preserves factual content outside them, while our analysis further reveals how directional conflicts evolve throughout generation. Experiments on CelebA-HQ and ImageNet demonstrate that CLEAR substantially improves counterfactual quality over latent-space baselines while achieving competitive quality with image-space methods at significantly lower computational cost.
 
