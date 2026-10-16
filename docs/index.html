@@ -246,6 +246,37 @@
               </table>
             </div>
             <p class="figure-caption">MSE is measured outside each variant's final editable support and is zero by construction for variants using factual-pixel composition.</p>
+
+            <h3 class="title is-4">Hyperparameter Sensitivity</h3>
+            <p>
+              We vary one parameter at a time from the default configuration (&tau; = 0.5, <em>t</em><sub>s</sub> = 0.6, <em>N</em> = 20, <em>s</em> = 8, &rho; = 5%) on CelebA-HQ <em>Smile</em>. The results show substantial trade-offs between counterfactual validity, realism, and preservation, so parameter selection matters. This single-task analysis does not establish robustness across datasets.
+            </p>
+            <div class="table-container">
+              <table class="table is-hoverable is-striped ablation-table">
+                <thead>
+                  <tr><th class="has-text-left">Setting</th><th>FID &darr;</th><th>MNAC &darr;</th><th>COUT &uarr;</th><th>FR (%) &uarr;</th></tr>
+                </thead>
+                <tbody>
+                  <tr class="is-selected"><td class="has-text-left"><strong>Default</strong></td><td>2.18</td><td>1.30</td><td>0.65</td><td>99.6</td></tr>
+                  <tr><td class="has-text-left" colspan="5"><em>Conflict sensitivity</em></td></tr>
+                  <tr><td class="has-text-left">&tau; = 0.25</td><td>2.54</td><td>1.33</td><td>0.59</td><td>95.2</td></tr>
+                  <tr><td class="has-text-left">&tau; = 1.0</td><td>4.28</td><td>1.71</td><td>0.68</td><td>99.7</td></tr>
+                  <tr><td class="has-text-left" colspan="5"><em>Starting-time sensitivity</em></td></tr>
+                  <tr><td class="has-text-left"><em>t</em><sub>s</sub> = 0.4</td><td>5.42</td><td>3.27</td><td>0.74</td><td>99.9</td></tr>
+                  <tr><td class="has-text-left"><em>t</em><sub>s</sub> = 0.8</td><td>3.40</td><td>1.42</td><td>0.65</td><td>86.4</td></tr>
+                  <tr><td class="has-text-left" colspan="5"><em>Sampling-step sensitivity</em></td></tr>
+                  <tr><td class="has-text-left"><em>N</em> = 10</td><td>2.98</td><td>1.35</td><td>0.57</td><td>90.1</td></tr>
+                  <tr><td class="has-text-left"><em>N</em> = 40</td><td>3.66</td><td>1.51</td><td>0.68</td><td>99.5</td></tr>
+                  <tr><td class="has-text-left" colspan="5"><em>Guidance-scale sensitivity</em></td></tr>
+                  <tr><td class="has-text-left"><em>s</em> = 4</td><td>2.21</td><td>1.30</td><td>0.44</td><td>93.5</td></tr>
+                  <tr><td class="has-text-left"><em>s</em> = 12</td><td>5.82</td><td>3.40</td><td>0.72</td><td>99.7</td></tr>
+                  <tr><td class="has-text-left" colspan="5"><em>Support-ratio sensitivity</em></td></tr>
+                  <tr><td class="has-text-left">&rho; = 3%</td><td>2.12</td><td>1.29</td><td>0.42</td><td>88.0</td></tr>
+                  <tr><td class="has-text-left">&rho; = 8%</td><td>2.63</td><td>1.48</td><td>0.67</td><td>99.6</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="figure-caption"><strong>Hyperparameter sensitivity on CelebA-HQ <em>Smile</em> (supplementary).</strong> A smaller &tau; or <em>s</em>, a later <em>t</em><sub>s</sub>, fewer steps, or a smaller &rho; lower the flip rate, whereas a larger &tau; or <em>s</em> and an earlier <em>t</em><sub>s</sub> raise validity at the cost of FID and MNAC. The default balances validity, realism, and preservation.</p>
           </div>
         </div>
       </div>
