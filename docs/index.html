@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="Official implementation of CLEAR: Cooperative Latent Flow for Visual Counterfactual Explanations with Accurate Region Preservation, accepted at WACV 2027.">
+  <meta name="keywords" content="CLEAR, Visual Counterfactual Explanations, Flow Matching, Latent Flow, WACV 2027">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="CLEAR: Cooperative Latent Flow for Visual Counterfactual Explanations with Accurate Region Preservation">
+  <meta property="og:description" content="Official implementation · WACV 2027">
+  <meta property="og:url" content="https://yan-zen9.github.io/CLEAR/">
+  <meta property="og:image" content="https://yan-zen9.github.io/CLEAR/assets/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://yan-zen9.github.io/CLEAR/assets/og.png">
+  <title>CLEAR: Cooperative Latent Flow for Visual Counterfactual Explanations with Accurate Region Preservation</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">CLEAR: Cooperative Latent Flow for Visual Counterfactual Explanations with Accurate Region Preservation</h1>
+
+          <a href="https://wacv.thecvf.com/Conferences/2027" target="_blank" rel="noopener noreferrer">
+            <img src="./assets/wacv-2027.png" alt="WACV 2027" width="320">
+          </a>
+          <p class="is-size-6 has-text-grey publication-note">Accepted to WACV 2027 (direct Round 2 submission, no rebuttal)</p>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><a href="https://scholar.google.com/citations?user=yDMaul4AAAAJ&amp;hl=en" target="_blank" rel="noopener noreferrer">Yan Zeng</a>,</span>
+            <span class="author-block"><a href="https://scholar.google.com/citations?hl=en&amp;user=y6XNTKEAAAAJ" target="_blank" rel="noopener noreferrer">Changlu Guo</a><sup>*</sup>,</span>
+            <span class="author-block"><a href="https://scholar.google.com/citations?user=rE3QwMQAAAAJ&amp;hl=en" target="_blank" rel="noopener noreferrer">Oskar Kristoffersen</a><sup>*</sup>,</span>
+            <span class="author-block"><a href="https://scholar.google.com/citations?user=bkWG4OYAAAAJ&amp;hl=en" target="_blank" rel="noopener noreferrer">Anders Nymark Christensen</a>,</span>
+            <span class="author-block"><a href="https://scholar.google.com/citations?user=AH58CjUAAAAJ&amp;hl=en" target="_blank" rel="noopener noreferrer">Morten Rieger Hannemose</a>,</span>
+            <span class="author-block"><a href="https://scholar.google.com/citations?user=WsgfNRMAAAAJ&amp;hl=en" target="_blank" rel="noopener noreferrer">Anders Bjorholm Dahl</a></span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Technical University of Denmark</span>
+          </div>
+          <div class="is-size-6 has-text-grey">
+            <sup>*</sup>Equal contribution
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <span class="link-block">
+                <span class="external-link button is-normal is-rounded is-dark" disabled title="Coming soon">
+                  <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                  <span>arXiv (coming soon)</span>
+                </span>
+              </span>
+              <span class="link-block">
+                <a href="https://github.com/Yan-Zen9/CLEAR"
+                   class="external-link button is-normal is-rounded is-dark"
+                   target="_blank" rel="noopener noreferrer">
+                  <span class="icon"><i class="fab fa-github"></i></span>
+                  <span>Code</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <img src="./assets/teaser.png" class="fig-medium"
+           alt="Additive guidance causes excessive editing, hard projection causes insufficient editing, and CLEAR produces a natural smile">
+      <h2 class="subtitle has-text-centered">
+        CLEAR adaptively regulates conflicting classifier guidance, avoiding both the excessive editing of additive guidance and the insufficient editing of hard projection.
+      </h2>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Visual counterfactual explanations (VCEs) should alter a classifier's prediction while remaining realistic and preserving decision-irrelevant content. Image-space methods provide high-quality counterfactuals but are computationally costly, whereas latent-space methods are more efficient but often less faithful. We identify two sources responsible for this gap. First, latent generation recovers a natural sample from a perturbed representation, whereas classifier guidance pushes it toward a target class, so their update directions may oppose. Second, VAE reconstruction can alter regions that should remain unchanged.
+          </p>
+          <p>
+            We introduce CLEAR, a latent Flow Matching framework for VCEs. CLEAR uses Flow Matching's explicit instantaneous velocity as a reference for the generative direction to decompose classifier guidance into <em>cooperative</em> and <em>conflicting</em> components. It preserves the cooperative component and adaptively attenuates only the conflicting one according to conflict strength. We further analyze conflict frequency and strength throughout generation to reveal how classifier guidance interacts with the generative process. CLEAR also dynamically identifies editable regions, constrains latent modifications, and directly preserves factual content outside them to reduce VAE-induced changes. Across five bidirectional tasks on two datasets, CLEAR retains latent-space efficiency while achieving counterfactual quality comparable to or better than strong image-space baselines, with a 2.5&times; speedup over the strongest baseline.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Method Overview</h2>
+        <div class="content has-text-justified">
+          <p>
+            Starting from a partially noised factual latent, CLEAR evolves a single latent trajectory along a guided flow. At each step, the flow model provides the generative velocity and a one-step image estimate, from which the frozen target classifier produces both the classifier force and the current decision-relevant support. Cooperative Flow Guidance determines <em>how</em> the classifier force modifies the generative direction, while Adaptive Support Preservation determines <em>where</em> the modification is allowed.
+          </p>
+          <img src="./assets/method.png"
+               alt="Overview of the CLEAR framework"
+               loading="lazy">
+          <p class="figure-caption"><strong>Overview of CLEAR.</strong> Repeating these coupled updates yields a counterfactual that concentrates changes within the evolving editable support while preserving decision-irrelevant factual content.</p>
+
+          <h3 class="title is-4">Cooperative Flow Guidance</h3>
+          <p>
+            Flow Matching predicts an explicit instantaneous velocity <em>v<sub>t</sub></em>, which can be compared directly with the classifier force <em>u<sub>t</sub></em> = &minus;<em>g<sub>t</sub></em>, unlike the sampler-dependent updates of DDPMs. CLEAR decomposes <em>u<sub>t</sub></em> into components parallel and orthogonal to <em>v<sub>t</sub></em>, and attenuates only the opposing parallel component, with a strength that grows with the degree of conflict. Cooperative guidance is therefore preserved, and only harmful conflict is suppressed.
+          </p>
+          <img src="./assets/coop.png" class="fig-medium"
+               alt="From sampler-dependent denoising to cooperative flow guidance"
+               loading="lazy">
+          <p class="figure-caption"><strong>From sampler-dependent denoising to cooperative flow guidance.</strong> (a) In DDPMs the update direction depends on the chosen sampler. (b) Flow Matching directly predicts the velocity <em>v<sub>t</sub></em>, an explicit generative direction. (c) Under mild or severe conflict, CLEAR increasingly attenuates only the opposing component as the conflict strength grows.</p>
+
+          <h3 class="title is-4">Adaptive Support Preservation</h3>
+          <p>
+            CLEAR estimates the editable support with target-class Grad-CAM on the classifier view, keeps the top salient pixels, extracts the largest connected component and dilates it. The support is refreshed at every step, so it adapts as the counterfactual evolves. Average-pooling it to the latent grid yields a soft gate: classifier-driven updates act inside the support, while the rest of the latent follows the original flow. Finally, the factual pixels outside the final support are copied back, so that VAE reconstruction cannot alter them.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Efficiency</h2>
+          <div class="content has-text-justified">
+            <p>
+              On CelebA-HQ <em>Smile</em>, CLEAR achieves the lowest runtime and FID among the compared methods while keeping a low peak GPU memory footprint, with 2.5&times; and 58.1&times; speedups over MaskDiME and DiME, respectively. It is also substantially faster than the latent baseline LDCE-txt, with a clearly lower FID.
+            </p>
+            <img src="./assets/efficiency.png" class="fig-medium"
+                 alt="Runtime, FID and peak GPU memory comparison on CelebA-HQ Smile"
+                 loading="lazy">
+            <p class="figure-caption">1,000 images at 256&times;256 resolution with a batch size of 3. Runtime and peak GPU memory measure counterfactual inference only. &dagger; denotes a latent-space method.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Visual Results</h2>
+        <div class="content has-text-justified">
+          <p>
+            CLEAR produces localized edits with strong identity preservation on CelebA-HQ, and handles challenging global semantic transformations on ImageNet.
+          </p>
+
+          <h3 class="title is-4">CelebA-HQ</h3>
+          <img src="./assets/qualitative-celebahq.jpg"
+               alt="Qualitative comparison on CelebA-HQ between the factual image, MaskDiME and CLEAR"
+               loading="lazy">
+          <p class="figure-caption"><strong>Qualitative comparison on CelebA-HQ using DenseNet-121.</strong> From left to right: the factual image and counterfactual images generated by MaskDiME and CLEAR.</p>
+
+          <h3 class="title is-4">ImageNet</h3>
+          <img src="./assets/qualitative-imagenet.jpg" class="fig-medium"
+               alt="Qualitative results on ImageNet for three bidirectional class pairs"
+               loading="lazy">
+          <p class="figure-caption"><strong>Qualitative results on ImageNet using ResNet-50.</strong> Each pair shows a factual image and the corresponding counterfactual generated by CLEAR for the paired target class.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Directional Conflict Analysis</h2>
+        <div class="content has-text-justified">
+          <p>
+            Directional conflict occurs frequently across all five bidirectional tasks and becomes more common toward the end of generation, which is counter-intuitive since the classifier force is expected to align better with the generative direction as target semantics emerge. Conflict strength follows task-dependent dynamics: ImageNet transformations show strong early conflicts that decrease rapidly, whereas CelebA-HQ edits start weaker, peak at intermediate stages and then decline. Conflict should therefore not be treated as a binary event, and its degree matters. Hard Projection and Additive Guidance retain 0% and 100% of the conflicting component, whereas CLEAR adaptively retains 83.3&ndash;88.8% across the five tasks.
+          </p>
+          <img src="./assets/conflict-analysis.png"
+               alt="Conflict frequency, conflict strength and retained conflicting component across five tasks"
+               loading="lazy">
+          <p class="figure-caption"><strong>Directional conflict analysis during generation.</strong> (a) Conflict frequency across Flow Matching timesteps. (b) Conflict strength, measured by &#8214;<em>u</em><sub><em>t</em>&#8741;</sub>&#8214;<sub>2</sub> / &#8214;<em>v<sub>t</sub></em>&#8214;<sub>2</sub>. (c) Percentage of the conflicting component retained after Cooperative Flow Guidance.</p>
+
+          <p>
+            The conflict regime also shapes the final counterfactual. When conflicts are weak, even a high conflict frequency leads to limited differences between guidance strategies. Low-frequency but strong conflicts are already enough to produce noticeable differences: Additive Guidance may cause excessive modification, whereas Hard Projection may over-suppress useful classifier guidance. When both frequency and strength are high, the differences are most pronounced, and CLEAR achieves a better balance between target modification and visual naturalness.
+          </p>
+          <img src="./assets/conflict-regimes.jpg" class="fig-medium"
+               alt="Qualitative results under different conflict regimes on CelebA-HQ Smile"
+               loading="lazy">
+          <p class="figure-caption"><strong>Qualitative results under different conflict regimes.</strong> Rows show examples with different combinations of conflict frequency and strength.</p>
+
+          <img src="./assets/supp-conflict.jpg" class="fig-medium"
+               alt="Additional qualitative results under different conflict regimes on CelebA-HQ Age and ImageNet"
+               loading="lazy">
+          <p class="figure-caption"><strong>Additional results (supplementary).</strong> CelebA-HQ <em>Age</em> and ImageNet show the same consistent behavior across conflict settings.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Ablation Study</h2>
+          <div class="content has-text-justified">
+            <p>
+              We evaluate the main components of CLEAR on CelebA-HQ <em>Smile</em>. For Cooperative Flow Guidance, <em>Additive Guidance</em> disables conflict-aware attenuation (&beta;<sub>t</sub> = 0), while <em>Hard Projection</em> completely removes the opposing component whenever it exists. Fully retaining conflicting guidance degrades realism and non-target preservation, while removing it entirely reduces counterfactual validity. For Adaptive Support Preservation, removing any of the three components degrades the overall performance.
+            </p>
+            <div class="table-container">
+              <table class="table is-hoverable is-striped ablation-table">
+                <thead>
+                  <tr><th class="has-text-left">Variant</th><th>FID &darr;</th><th>MNAC &darr;</th><th>COUT &uarr;</th><th>FR (%) &uarr;</th><th>MSE &darr;</th></tr>
+                </thead>
+                <tbody>
+                  <tr class="is-selected"><td class="has-text-left"><strong>CLEAR</strong></td><td>2.18</td><td>1.30</td><td>0.65</td><td>99.6</td><td>0.000</td></tr>
+                  <tr><td class="has-text-left" colspan="6"><em>Cooperative guidance</em></td></tr>
+                  <tr><td class="has-text-left">Additive Guidance</td><td>4.47</td><td>2.16</td><td>0.71</td><td>99.7</td><td>0.000</td></tr>
+                  <tr><td class="has-text-left">Hard Projection</td><td>3.66</td><td>1.63</td><td>0.64</td><td>95.6</td><td>0.000</td></tr>
+                  <tr><td class="has-text-left" colspan="6"><em>Adaptive Support Preservation</em></td></tr>
+                  <tr><td class="has-text-left">Fixed Mask</td><td>3.40</td><td>1.57</td><td>0.61</td><td>93.7</td><td>0.000</td></tr>
+                  <tr><td class="has-text-left">W/o Masked View</td><td>9.74</td><td>3.07</td><td>0.73</td><td>99.6</td><td>0.000</td></tr>
+                  <tr><td class="has-text-left">W/o Latent Mask</td><td>6.42</td><td>2.48</td><td>0.58</td><td>92.8</td><td>0.000</td></tr>
+                  <tr><td class="has-text-left">W/o Pixel Reuse</td><td>3.52</td><td>1.61</td><td>0.60</td><td>99.6</td><td>0.011</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="figure-caption">MSE is measured outside each variant's final editable support and is zero by construction for variants using factual-pixel composition.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Region Preservation</h2>
+        <div class="content has-text-justified">
+          <p>
+            The editable support concentrates changes in target-relevant regions while preserving the remaining factual content. Since CLEAR reuses the factual pixels outside the final support, the error in these regions is zero by construction. This verifies the composition operation, but it does not independently validate support accuracy or continuity at the composition boundary.
+          </p>
+          <img src="./assets/supp-support.jpg"
+               alt="Factual image, saliency map, counterfactual and absolute difference map"
+               loading="lazy">
+          <p class="figure-caption"><strong>Visualization of localized counterfactual editing (supplementary).</strong></p>
+
+          <img src="./assets/supp-exact-preservation.jpg" class="fig-narrow"
+               alt="Factual image, CLEAR counterfactual and pixel-wise difference map for four tasks"
+               loading="lazy">
+          <p class="figure-caption"><strong>Exact preservation with Adaptive Support Preservation (supplementary).</strong> From left to right: factual image, CLEAR counterfactual, and pixel-wise difference map. Pixels outside the editable support remain unchanged.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3 has-text-centered">BibTeX</h2>
+        <div class="content">
+<pre><code>Coming soon.</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a
+            <a rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            This website uses the template from
+            <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
