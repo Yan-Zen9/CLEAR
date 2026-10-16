@@ -1,6 +1,6 @@
 # CLEAR: Cooperative Latent Flow for Visual Counterfactual Explanations with Accurate Region Preservation
 
-**Accepted to WACV 2027** (direct Round 2 submission, no rebuttal).
+**Accepted to WACV 2027** (Direct Round 2 submission).
 
 <!-- Once the arXiv link exists, wrap the Paper badge as [![...](...)](URL). -->
 ![Paper](https://img.shields.io/badge/arXiv-Paper-b31b1b?logo=arxiv&logoColor=white)

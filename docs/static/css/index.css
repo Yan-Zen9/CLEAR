@@ -191,12 +191,36 @@ body {
   margin: 0 auto;
 }
 
-.ablation-table td,
-.ablation-table th {
+.table.ablation-table td:not([align]),
+.table.ablation-table th:not([align]) {
   text-align: center;
 }
 
-.ablation-table td.has-text-left,
-.ablation-table th.has-text-left {
+.table.ablation-table td.has-text-left:not([align]),
+.table.ablation-table th.has-text-left:not([align]) {
   text-align: left;
+}
+
+.quant-table {
+  margin: 0 auto;
+}
+
+.table.quant-table th:not([align]),
+.table.quant-table td:not([align]) {
+  text-align: center;
+  white-space: nowrap;
+  padding: 0.35em 0.45em;
+}
+
+.table.quant-table th.has-text-left:not([align]),
+.table.quant-table td.has-text-left:not([align]) {
+  text-align: left;
+}
+
+.quant-table .group-start {
+  border-left: 1px solid #dbdbdb;
+}
+
+.quant-table tr.clear-row td {
+  background-color: #e8f6f2;
 }
