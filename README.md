@@ -2,8 +2,7 @@
 
 **Accepted to WACV 2027** (Direct Round 2 submission).
 
-<!-- Once the arXiv link exists, wrap the Paper badge as [![...](...)](URL). -->
-![Paper](https://img.shields.io/badge/arXiv-Paper-b31b1b?logo=arxiv&logoColor=white)
+[![arXiv](https://img.shields.io/badge/arXiv-2610.23577-b31b1b?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2610.23577)
 [![Project Page](https://img.shields.io/badge/Project-Page-4285F4?logo=googlechrome&logoColor=white)](https://yan-zen9.github.io/CLEAR/)
 
 **CLEAR** is an efficient latent Flow Matching framework for high-quality visual counterfactual explanations, addressing conflicts between classifier guidance and the generative flow, as well as unintended changes caused by VAE reconstruction. **Cooperative Flow Guidance** decomposes classifier guidance relative to the instantaneous flow velocity, adaptively suppressing conflicting components while preserving useful ones. **Adaptive Support Preservation (ASP)** dynamically localizes editable regions and preserves factual content outside them, while our analysis further reveals how directional conflicts evolve throughout generation. Experiments on CelebA-HQ and ImageNet demonstrate that CLEAR substantially improves counterfactual quality over latent-space baselines while achieving competitive quality with image-space methods at significantly lower computational cost.
@@ -118,7 +117,17 @@ CelebA-HQ download and preparation follow ACE / STEEX ([CelebAMask-HQ](https://g
 
 ## BibTeX
 
-Coming soon.
+```bibtex
+@misc{zeng2026clear,
+  title         = {{CLEAR}: Cooperative Latent Flow for Visual Counterfactual Explanations with Accurate Region Preservation},
+  author        = {Yan Zeng and Changlu Guo and Oskar Kristoffersen and Anders Nymark Christensen and Morten Rieger Hannemose and Anders Bjorholm Dahl},
+  year          = {2026},
+  eprint        = {2610.23577},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CV},
+  url           = {https://arxiv.org/abs/2610.23577}
+}
+```
 
 ## License
 
