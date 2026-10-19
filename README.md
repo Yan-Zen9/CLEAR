@@ -119,8 +119,11 @@ CelebA-HQ download and preparation follow ACE / STEEX ([CelebAMask-HQ](https://g
 
 ```bibtex
 @misc{zeng2026clear,
-  title         = {{CLEAR}: Cooperative Latent Flow for Visual Counterfactual Explanations with Accurate Region Preservation},
-  author        = {Yan Zeng and Changlu Guo and Oskar Kristoffersen and Anders Nymark Christensen and Morten Rieger Hannemose and Anders Bjorholm Dahl},
+  title         = {{CLEAR}: Cooperative Latent Flow for Visual Counterfactual
+                   Explanations with Accurate Region Preservation},
+  author        = {Yan Zeng and Changlu Guo and Oskar Kristoffersen and
+                   Anders Nymark Christensen and Morten Rieger Hannemose and
+                   Anders Bjorholm Dahl},
   year          = {2026},
   eprint        = {2610.23577},
   archivePrefix = {arXiv},
